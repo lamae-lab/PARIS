@@ -1,0 +1,741 @@
+<!doctype html>
+<title>sota-agent — Manuel des skills</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface2: #f0f2f9;
+  --border: #dde1ef;
+  --fg: #1a1d2e;
+  --fg2: #4a5068;
+  --fg3: #7a82a0;
+  --navy: #0d1b2a;
+  --blue: #2e86ab;
+  --blue-light: #d6eaf8;
+  --green: #1a7a4a;
+  --green-light: #d5f0e3;
+  --amber: #b06000;
+  --amber-light: #fef3cd;
+  --red: #c0392b;
+  --red-light: #fdecea;
+  --purple: #6c3483;
+  --purple-light: #ede0f7;
+  --code-bg: #1e2235;
+  --code-fg: #a9b1d6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --surface: #1a1d2e; --surface2: #242840; --border: #2e3350;
+    --fg: #e8eaf6; --fg2: #9fa8c0; --fg3: #5c6480;
+    --blue: #56b4d9; --blue-light: #0d2a40;
+    --green: #34c77a; --green-light: #0a2618;
+    --amber: #f5b942; --amber-light: #2a1e00;
+    --red: #e74c3c; --red-light: #2a0a08;
+    --purple: #b57bee; --purple-light: #200a30;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #1a1d2e; --surface2: #242840; --border: #2e3350;
+  --fg: #e8eaf6; --fg2: #9fa8c0; --fg3: #5c6480;
+  --blue: #56b4d9; --blue-light: #0d2a40; --green: #34c77a; --green-light: #0a2618;
+  --amber: #f5b942; --amber-light: #2a1e00; --red: #e74c3c; --red-light: #2a0a08;
+  --purple: #b57bee; --purple-light: #200a30;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.65;
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.page { max-width: 860px; margin: 0 auto; padding: 3rem 0 5rem; }
+
+/* ── Header ── */
+.doc-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--navy);
+}
+.doc-title { font-size: 1.75rem; font-weight: 700; color: var(--navy); line-height: 1.2; }
+.doc-title span { color: var(--blue); }
+.doc-subtitle { font-size: 0.9rem; color: var(--fg2); margin-top: 0.35rem; }
+.doc-version {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  background: var(--navy);
+  color: #56b4d9;
+  padding: 0.3em 0.75em;
+  border-radius: 6px;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ── TOC ── */
+.toc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--navy);
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.2rem;
+  margin-bottom: 2rem;
+}
+.toc-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg3); margin-bottom: 0.6rem; }
+.toc ol { padding-left: 1.2rem; }
+.toc li { font-size: 0.88rem; color: var(--fg2); margin-bottom: 0.2rem; }
+.toc a { color: var(--blue); text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+/* ── Sections ── */
+h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+h2 .anchor { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--fg3); font-weight: 400; }
+h3 { font-size: 0.98rem; font-weight: 600; color: var(--fg); margin: 1.4rem 0 0.5rem; }
+p { margin-bottom: 0.8rem; color: var(--fg2); font-size: 0.93rem; }
+p:last-child { margin-bottom: 0; }
+ul, ol { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+li { font-size: 0.93rem; color: var(--fg2); margin-bottom: 0.3rem; }
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82em;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  color: var(--blue);
+}
+
+/* ── Code blocks ── */
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  margin: 0.75rem 0 1rem;
+  line-height: 1.55;
+}
+pre .cmd { color: #9ece6a; }
+pre .cmt { color: #565f89; font-style: italic; }
+pre .var { color: #7dcfff; }
+pre .str { color: #e0af68; }
+pre .kw  { color: #bb9af7; }
+pre .path { color: #73daca; }
+
+/* ── Skill cards ── */
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.skill-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.9rem 1.2rem 0.8rem;
+  background: var(--surface2);
+  border-bottom: 1px solid var(--border);
+}
+.skill-name {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.skill-name-dark { color: var(--blue); }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.skill-tag {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.tag-start   { background: var(--blue-light); color: #0e6486; }
+.tag-manual  { background: var(--amber-light); color: var(--amber); }
+.tag-auto    { background: var(--green-light); color: var(--green); }
+.tag-ro      { background: var(--surface2); color: var(--fg3); border: 1px solid var(--border); }
+.skill-body { padding: 1rem 1.2rem; }
+.skill-desc { font-size: 0.9rem; color: var(--fg2); margin-bottom: 0.9rem; }
+.steps-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--fg3); margin-bottom: 0.5rem; }
+.steps-list { list-style: none; padding: 0; margin: 0 0 1rem; }
+.steps-list li {
+  display: flex;
+  gap: 0.7rem;
+  font-size: 0.87rem;
+  color: var(--fg2);
+  margin-bottom: 0.45rem;
+  align-items: flex-start;
+}
+.step-dot {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.outputs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+.output-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.2em 0.5em;
+  color: var(--fg2);
+}
+.output-chip.new { border-color: #f39c1288; background: var(--amber-light); color: var(--amber); }
+
+/* ── Callout ── */
+.callout {
+  border-left: 3px solid var(--blue);
+  background: var(--blue-light);
+  border-radius: 0 8px 8px 0;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  font-size: 0.87rem;
+  color: var(--fg);
+}
+.callout.warn { border-color: var(--amber); background: var(--amber-light); }
+.callout.tip  { border-color: var(--green); background: var(--green-light); }
+
+/* ── Workflow timeline ── */
+.workflow {
+  position: relative;
+  padding-left: 2rem;
+  margin: 1rem 0 1.5rem;
+}
+.workflow::before {
+  content: '';
+  position: absolute;
+  left: 0.45rem;
+  top: 0.5rem;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.wf-step {
+  position: relative;
+  margin-bottom: 1rem;
+}
+.wf-step::before {
+  content: '';
+  position: absolute;
+  left: -1.6rem;
+  top: 0.35rem;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 2px solid var(--surface);
+}
+.wf-step.checkpoint::before { background: var(--amber); }
+.wf-step.done::before { background: var(--green); }
+.wf-cmd {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blue);
+  margin-bottom: 0.15rem;
+}
+.wf-desc { font-size: 0.85rem; color: var(--fg2); }
+.wf-note { font-size: 0.78rem; color: var(--fg3); margin-top: 0.15rem; }
+
+/* ── Prereq table ── */
+.prereq-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0 1.25rem; }
+.prereq-table th { background: var(--surface2); border: 1px solid var(--border); padding: 0.45rem 0.75rem; font-weight: 600; font-size: 0.78rem; text-align: left; color: var(--fg2); }
+.prereq-table td { border: 1px solid var(--border); padding: 0.42rem 0.75rem; color: var(--fg2); vertical-align: top; }
+.prereq-table tr:nth-child(even) td { background: var(--surface2); }
+.check { color: var(--green); font-weight: 700; }
+.opt   { color: var(--amber); }
+
+/* ── Env table ── */
+.env-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 0.75rem 0 1.25rem; overflow-x: auto; display: block; }
+.env-table th { background: var(--surface2); border: 1px solid var(--border); padding: 0.4rem 0.7rem; font-weight: 600; font-size: 0.75rem; text-align: left; color: var(--fg2); white-space: nowrap; }
+.env-table td { border: 1px solid var(--border); padding: 0.38rem 0.7rem; color: var(--fg2); font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; }
+.env-table td:last-child { font-family: 'Inter', sans-serif; font-size: 0.82rem; }
+.req { color: var(--red); font-weight: 600; font-family: 'Inter', sans-serif; }
+.rec { color: var(--amber); font-weight: 600; font-family: 'Inter', sans-serif; }
+
+/* Footer */
+.doc-footer {
+  margin-top: 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--fg3);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+@media (max-width: 600px) {
+  .doc-header { flex-direction: column; }
+  .skill-header { flex-direction: column; }
+}
+</style>
+
+<div class="page">
+
+<!-- Header -->
+<div class="doc-header">
+  <div>
+    <div class="doc-title">Manuel des <span>skills</span> sota-agent</div>
+    <div class="doc-subtitle">Installation, configuration et usage des 8 skills Claude Code</div>
+  </div>
+  <div class="doc-version">v0.5 · 2026-10-12</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="toc-title">Table des matières</div>
+  <ol>
+    <li><a href="#prereq">Prérequis et installation</a></li>
+    <li><a href="#structure">Structure du répertoire</a></li>
+    <li><a href="#envvars">Variables d'environnement</a></li>
+    <li><a href="#skills">Référence des skills</a></li>
+    <li><a href="#workflow">Workflow type complet</a></li>
+    <li><a href="#troubleshoot">Résolution de problèmes</a></li>
+  </ol>
+</div>
+
+<!-- 1. Prérequis -->
+<h2 id="prereq">1 — Prérequis et installation <span class="anchor">#prereq</span></h2>
+
+<h3>Logiciels requis</h3>
+<table class="prereq-table">
+  <thead>
+    <tr><th>Outil</th><th>Version min.</th><th>Usage</th><th>Statut</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>Claude Code</code></td><td>CLI récent</td><td>Orchestrateur principal</td><td><span class="check">●</span> Requis</td></tr>
+    <tr><td><code>python3</code></td><td>3.9+</td><td>Notebook, pdf_utils, api_clients</td><td><span class="check">●</span> Requis</td></tr>
+    <tr><td><code>node</code> + <code>npm</code></td><td>Node 18+</td><td>Export PPTX (pptxgenjs)</td><td><span class="check">●</span> Requis</td></tr>
+    <tr><td><code>pandoc</code></td><td>3.0+</td><td>Export DOCX</td><td><span class="check">●</span> Requis</td></tr>
+    <tr><td><code>jupyter</code></td><td>7.0+</td><td>Notebook PRISMA</td><td><span class="check">●</span> Requis</td></tr>
+    <tr><td><code>markitdown</code></td><td>latest</td><td>QA de contenu PPTX</td><td><span class="opt">○</span> Recommandé</td></tr>
+    <tr><td><code>soffice</code> (LibreOffice)</td><td>7+</td><td>Validation DOCX</td><td><span class="opt">○</span> Optionnel</td></tr>
+  </tbody>
+</table>
+
+<h3>Paquets Python</h3>
+<pre><span class="cmt"># Installer dans l'environnement Python utilisé par Claude Code</span>
+<span class="cmd">pip install</span> networkx python-louvain scikit-learn scipy requests \
+            pymupdf markitdown jupyter</pre>
+
+<h3>Installation des skills</h3>
+<p>Les skills sont stockés dans <code>.claude/skills/</code> à la racine du répertoire de travail. Chaque skill est un sous-répertoire contenant un fichier <code>SKILL.md</code>.</p>
+<pre><span class="cmt"># Vérifier que les skills sont en place</span>
+<span class="cmd">ls</span> <span class="path">/mnt/e/lamae-sota-tool/.claude/skills/</span>
+<span class="cmt"># sota-curate  sota-export  sota-new  sota-quality</span>
+<span class="cmt"># sota-review  sota-status  sota-update  sota-write</span></pre>
+
+<div class="callout tip">
+  <strong>Invocation :</strong> dans Claude Code, tapez <code>/sota-new "Votre sujet de recherche"</code>. La barre oblique déclenche le skill automatiquement.
+</div>
+
+<!-- 2. Structure -->
+<h2 id="structure">2 — Structure du répertoire <span class="anchor">#structure</span></h2>
+
+<pre><span class="path">sota-agent-0.4/</span>
+├── <span class="var">CLAUDE.md</span>              <span class="cmt">← lire en premier à chaque session</span>
+├── <span class="path">main/</span>
+│   ├── <span class="var">SOUL.md</span>            <span class="cmt">← protocole Conductor v0.4 (13 étapes)</span>
+│   └── <span class="var">AGENTS.md</span>          <span class="cmt">← registre 15 agents + règles workspace</span>
+├── <span class="path">&lt;agent_name&gt;/SOUL.md</span>   <span class="cmt">← un sous-répertoire par agent</span>
+├── <span class="path">utils/</span>
+│   ├── <span class="var">api_clients.py</span>     <span class="cmt">← client PDF retrieval (Elsevier, Unpaywall…)</span>
+│   ├── <span class="var">pdf_utils.py</span>       <span class="cmt">← extraction pymupdf</span>
+│   └── <span class="var">csv_utils.py</span>       <span class="cmt">← helpers CSV</span>
+└── <span class="path">runs/</span>
+    ├── <span class="var">index.md</span>           <span class="cmt">← liste de tous les runs (actifs + complétés)</span>
+    ├── <span class="path">template/RUN.md</span>    <span class="cmt">← copié pour chaque nouveau run</span>
+    └── <span class="path">YYYY-MM-DD-slug/</span>   <span class="cmt">← un répertoire par run</span>
+        ├── <span class="var">RUN.md</span>
+        ├── <span class="var">master_research_data.csv</span>
+        ├── <span class="var">paper_draft.md</span>     <span class="cmt">← manuscrit final</span>
+        ├── <span class="var">paper_draft.docx</span>   <span class="cmt">← export Word</span>
+        └── <span class="var">slides_presentation.pptx</span></pre>
+
+<!-- 3. Env vars -->
+<h2 id="envvars">3 — Variables d'environnement <span class="anchor">#envvars</span></h2>
+<p>À configurer <strong>avant</strong> de lancer <code>/sota-new</code>. Le strategist_agent effectue un pre-flight check et signale les clés manquantes.</p>
+
+<table class="env-table">
+  <thead>
+    <tr><th>Variable</th><th>Requis</th><th>Usage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>ELSEVIER_API_KEY</td><td><span class="req">REQUIS</span></td><td>Requêtes ScienceDirect (étape 2)</td></tr>
+    <tr><td>ELSEVIER_INST_TOKEN</td><td><span class="req">REQUIS</span></td><td>Accès full-text Elsevier (étape 2.5)</td></tr>
+    <tr><td>IEEE_API_KEY</td><td><span class="req">REQUIS</span></td><td>IEEE Xplore (étape 2)</td></tr>
+    <tr><td>UNPAYWALL_EMAIL</td><td><span class="req">REQUIS</span></td><td>Téléchargement PDF Unpaywall (étape 2.5)</td></tr>
+    <tr><td>S2_API_KEY</td><td><span class="rec">RECOMMANDÉ</span></td><td>100M req/day Semantic Scholar (vs ~10 sans clé)</td></tr>
+  </tbody>
+</table>
+
+<pre><span class="cmt"># Ajouter dans ~/.bashrc ou ~/.zshrc (ou exporter avant de lancer Claude Code)</span>
+<span class="kw">export</span> <span class="var">ELSEVIER_API_KEY</span>=<span class="str">"votre_cle"</span>
+<span class="kw">export</span> <span class="var">ELSEVIER_INST_TOKEN</span>=<span class="str">"votre_token"</span>
+<span class="kw">export</span> <span class="var">IEEE_API_KEY</span>=<span class="str">"votre_cle_ieee"</span>
+<span class="kw">export</span> <span class="var">UNPAYWALL_EMAIL</span>=<span class="str">"vous@institution.fr"</span>
+<span class="kw">export</span> <span class="var">S2_API_KEY</span>=<span class="str">"votre_cle_s2"</span>  <span class="cmt"># optionnel</span></pre>
+
+<div class="callout warn">
+  <strong>Important :</strong> déclarer les variables dans un fichier <code>.env</code> ne suffit pas — les agents ne le sourcent pas automatiquement. Utilisez <code>export</code> dans le shell parent de Claude Code.
+</div>
+
+<!-- 4. Skills -->
+<h2 id="skills">4 — Référence des skills <span class="anchor">#skills</span></h2>
+
+<!-- sota-new -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-new</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-start">DÉMARRAGE</span>
+      <span class="skill-tag tag-manual">CHECKPOINT A</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Lance un nouveau run PRISMA complet : crée le répertoire de run, interroge les APIs, filtre les papiers jusqu'au checkpoint borderline.</p>
+    <pre><span class="cmd">/sota-new</span> <span class="str">"ML for robust quantum control protocols"</span>
+<span class="cmt"># ou : /sota-new (sans argument → Claude demande le sujet)</span></pre>
+    <div class="steps-title">Étapes automatisées</div>
+    <ul class="steps-list">
+      <li><div class="step-dot">1</div><span>Crée <code>runs/YYYY-MM-DD-slug/</code> depuis le template, remplit <code>RUN.md</code></span></li>
+      <li><div class="step-dot">2</div><span>Exécute scoper_agent → strategist_agent (6 APIs) → pdf_retriever_agent (optionnel) → translator_agent</span></li>
+      <li><div class="step-dot">3</div><span>Exécute curator_agent phase 1, recompte les lignes ACCEPT du log (ne fait pas confiance au résumé)</span></li>
+      <li><div class="step-dot">4</div><span><strong>S'arrête</strong> et présente les papiers borderline sous forme de tableau</span></li>
+    </ul>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">scoper_output.md</span>
+      <span class="output-chip">raw_extraction_list.md</span>
+      <span class="output-chip">strategist_output.md</span>
+      <span class="output-chip">translation_report.md</span>
+      <span class="output-chip">borderline_review.md</span>
+      <span class="output-chip">pdf_retrieval_report.md</span>
+    </div>
+  </div>
+</div>
+
+<!-- sota-curate -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-curate</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-manual">APRÈS CHECKPOINT A</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Résout le checkpoint borderline, finalise le corpus, exécute l'analyse (notebook Sections 1–6, csv, pdf_analyzer si PDFs disponibles).</p>
+    <pre><span class="cmt"># Répondre d'abord aux borderlines dans le chat :</span>
+<span class="cmt"># "INCLUDE P0012, EXCLUDE P0034, INCLUDE P0067"</span>
+<span class="cmd">/sota-curate</span>
+<span class="cmt"># ou : /sota-curate runs/2026-10-11-mon-sujet</span></pre>
+    <div class="steps-title">Étapes automatisées</div>
+    <ul class="steps-list">
+      <li><div class="step-dot">1</div><span>Lit <code>borderline_review.md</code>, applique les décisions du Conductor</span></li>
+      <li><div class="step-dot">2</div><span>Recompte les ACCEPT depuis le decision log (corrige le résumé si divergence)</span></li>
+      <li><div class="step-dot">3</div><span>Forke agent_analyst → <code>master_research_data.csv</code> + notebook Sections 1–6</span></li>
+      <li><div class="step-dot">4</div><span>Forke pdf_analyzer_agent (optionnel, si <code>pdfs/</code> non vide)</span></li>
+    </ul>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">curation_report.md</span>
+      <span class="output-chip">master_research_data.csv</span>
+      <span class="output-chip">prisma_analysis_report.ipynb</span>
+      <span class="output-chip">bridge_papers.json</span>
+      <span class="output-chip">pdf_analysis_report.md</span>
+    </div>
+  </div>
+</div>
+
+<!-- sota-quality -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-quality</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-manual">CHECKPOINT B</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Enrichit les citations OpenAlex, calcule le QualityScore (grade A–D), analyse les gaps et les limitations (TRL matrix), génère les 5 figures.</p>
+    <pre><span class="cmd">/sota-quality</span></pre>
+    <div class="callout" style="margin: 0.75rem 0;">
+      <strong>Enrichissement obligatoire :</strong> si la majorité des <code>citation_count</code> est à 0, le skill requête OpenAlex pour les récupérer avant de calculer le score. Sans cette étape, S_network et S_bibliometric sont artificiellement bas.
+    </div>
+    <div class="steps-title">Étapes automatisées</div>
+    <ul class="steps-list">
+      <li><div class="step-dot">1</div><span>Enrichit les citations depuis OpenAlex → <code>openalex_cache.json</code></span></li>
+      <li><div class="step-dot">2</div><span>Forke quality_agent → QualityScore 0–100, grade, bridge papers, recommandations</span></li>
+      <li><div class="step-dot">3</div><span><strong>Checkpoint B :</strong> présente le dashboard + TRL summary. Attend PROCEED ou IMPROVE</span></li>
+      <li><div class="step-dot">4</div><span>Forke gap_finder_agent → <code>gap_analysis.md</code></span></li>
+      <li><div class="step-dot">5</div><span>Forke limits_agent → <code>limits_report.md</code> (TRL matrix, Top 5 pistes)</span></li>
+      <li><div class="step-dot">6</div><span>Forke figure_agent → 5 figures exécutées dans le notebook</span></li>
+    </ul>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">quality_report.md</span>
+      <span class="output-chip">openalex_cache.json</span>
+      <span class="output-chip">gap_analysis.md</span>
+      <span class="output-chip">limits_report.md</span>
+      <span class="output-chip">figures_manifest.md</span>
+      <span class="output-chip">fig1_taxonomy.svg</span>
+      <span class="output-chip">fig2_timeline.png</span>
+      <span class="output-chip">fig3_platform_heatmap.png</span>
+      <span class="output-chip">fig4_concept_network.png</span>
+      <span class="output-chip">fig5_gap_radar.png</span>
+    </div>
+  </div>
+</div>
+
+<!-- sota-write -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-write</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-manual">CHECKPOINT C</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Génère la bibliographie BibTeX, puis rédige le manuscrit complet (~8 000 mots) avec un checkpoint d'approbation du plan.</p>
+    <pre><span class="cmd">/sota-write</span></pre>
+    <div class="steps-title">Structure du manuscrit produit</div>
+    <ul class="steps-list">
+      <li><div class="step-dot">—</div><span>Abstract ≤ 250 mots · Introduction (RQ1–RQ4) · Background · Méthodologie (PRISMA + QualityScore)</span></li>
+      <li><div class="step-dot">—</div><span>Une section par cluster : bridge papers, Récents Progrès (24 derniers mois), synthèse intra-cluster</span></li>
+      <li><div class="step-dot">—</div><span>Discussion · Future Directions (Top 5 de <code>limits_report.md</code>) · Limitations · Conclusion · Références</span></li>
+    </ul>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">references.bib</span>
+      <span class="output-chip">synthesis_outline.md</span>
+      <span class="output-chip">paper_draft.md</span>
+    </div>
+  </div>
+</div>
+
+<!-- sota-review -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-review</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-auto">AUTO-ITÈRE</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Revue adversariale du manuscrit : vérification de l'intégrité des citations, des comptages PRISMA, de la cohérence qualité/gaps/TRL. Itère jusqu'au verdict ACCEPT ou MINOR.</p>
+    <pre><span class="cmd">/sota-review</span></pre>
+    <div class="steps-title">Checklist de la revue (vérifiée automatiquement)</div>
+    <ul style="font-size: 0.87rem; color: var(--fg2);">
+      <li>Chaque citation présente dans le CSV et dans <code>references.bib</code></li>
+      <li>Comptages PRISMA cohérents avec le decision log de curation</li>
+      <li>QualityScore et grade cités dans la Méthodologie</li>
+      <li>Bridge papers mentionnés dans les sections de cluster</li>
+      <li>Future Directions tracées vers les Top 5 de <code>limits_report.md</code></li>
+      <li>N figures = N dans <code>figures_manifest.md</code></li>
+    </ul>
+    <p style="font-size: 0.85rem; color: var(--fg2); margin-top: 0.75rem;">Après verdict ACCEPT ou MINOR : lance automatiquement <code>export_agent</code> → <code>.docx</code> + <code>.pptx</code>.</p>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">review_report.md</span>
+      <span class="output-chip">paper_draft_vN.md (backup)</span>
+      <span class="output-chip">paper_draft.docx</span>
+      <span class="output-chip">slides_presentation.pptx</span>
+    </div>
+  </div>
+</div>
+
+<!-- sota-export -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-export</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-auto">STANDALONE</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Exporte un <code>paper_draft.md</code> existant en Word et PowerPoint, sans relancer la revue.</p>
+    <pre><span class="cmd">/sota-export</span>
+<span class="cmt"># ou : /sota-export runs/2026-10-11-mon-sujet</span></pre>
+    <div class="steps-title">Outputs produits</div>
+    <div class="outputs-row">
+      <span class="output-chip">paper_draft.docx</span>
+      <span class="output-chip">slides_presentation.pptx</span>
+      <span class="output-chip">gen_slides.js</span>
+    </div>
+    <p style="font-size: 0.82rem; color: var(--fg3); margin-top: 0.5rem;">Nécessite Node.js + npm pour pptxgenjs. Les chemins vers apply_theme.js et validate.py sont résolus dynamiquement (aucun chemin absolu codé en dur).</p>
+  </div>
+</div>
+
+<!-- sota-status -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-status</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-ro">LECTURE SEULE</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Diagnostic complet du run actif : fichiers présents sur disque, cohérence des comptages, QualityScore, prochain skill à lancer.</p>
+    <pre><span class="cmd">/sota-status</span>
+<span class="cmt"># Affiche : ✅ étapes terminées | ⬜ à faire | ❌ marquées done mais fichier absent</span></pre>
+  </div>
+</div>
+
+<!-- sota-update -->
+<div class="skill-card">
+  <div class="skill-header">
+    <div class="skill-name">/sota-update</div>
+    <div class="skill-tags">
+      <span class="skill-tag tag-auto">DELTA RUN</span>
+    </div>
+  </div>
+  <div class="skill-body">
+    <p class="skill-desc">Rafraîchit un run existant avec les papiers publiés depuis la date d'extraction initiale, sans relancer tout le pipeline.</p>
+    <pre><span class="cmd">/sota-update</span> <span class="cmt"># demande la fenêtre temporelle delta</span></pre>
+    <p style="font-size: 0.87rem; color: var(--fg2);">Re-exécute ensuite dans l'ordre : Analyst → <code>/sota-quality</code> → <code>/sota-write</code> (mise à jour des clusters) → <code>/sota-review</code>.</p>
+  </div>
+</div>
+
+<!-- 5. Workflow type -->
+<h2 id="workflow">5 — Workflow type complet <span class="anchor">#workflow</span></h2>
+<p>Voici la séquence complète d'un run depuis la question de recherche jusqu'au document exporté. Les étapes en <strong style="color: var(--amber);">orange</strong> nécessitent une réponse humaine.</p>
+
+<div class="workflow">
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-new "votre sujet de recherche"</div>
+    <div class="wf-desc">Scoper → Strategist (6 APIs) → PDF Retriever → Translator → Curator phase 1</div>
+    <div class="wf-note">Durée typique : 10–20 min selon le nombre de papiers trouvés</div>
+  </div>
+  <div class="wf-step checkpoint">
+    <div class="wf-cmd" style="color: var(--amber);">⚠️  Checkpoint A — répondre aux borderlines</div>
+    <div class="wf-desc">Claude présente un tableau des papiers à score ambigu. Répondre : <code>INCLUDE P0012, EXCLUDE P0034</code></div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-curate</div>
+    <div class="wf-desc">Finalise le corpus, exécute Analyst + PDF Analyzer (si PDFs disponibles)</div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-quality</div>
+    <div class="wf-desc">OpenAlex enrichment → QualityScore → Gap Finder → Limits Agent → Figures</div>
+    <div class="wf-note">Durée typique : 15–30 min (requêtes OpenAlex)</div>
+  </div>
+  <div class="wf-step checkpoint">
+    <div class="wf-cmd" style="color: var(--amber);">⚠️  Checkpoint B — valider QualityScore + TRL</div>
+    <div class="wf-desc">Répondre <code>PROCEED</code> ou <code>IMPROVE</code>. Si IMPROVE : Claude suggère des améliorations ciblées.</div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-write</div>
+    <div class="wf-desc">BibTeX → Plan du manuscrit (outline)</div>
+  </div>
+  <div class="wf-step checkpoint">
+    <div class="wf-cmd" style="color: var(--amber);">⚠️  Checkpoint C — approuver le plan</div>
+    <div class="wf-desc">Claude présente les clusters, le plan des sections, le placement des figures. Approuver ou demander des ajustements.</div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-write (suite)</div>
+    <div class="wf-desc">Rédaction complète du manuscrit (~8 000 mots)</div>
+  </div>
+  <div class="wf-step">
+    <div class="wf-cmd">/sota-review</div>
+    <div class="wf-desc">Revue adversariale + boucle de révision (max 3 itérations) + export auto (.docx + .pptx)</div>
+  </div>
+  <div class="wf-step done">
+    <div class="wf-cmd" style="color: var(--green);">✅  Run terminé</div>
+    <div class="wf-desc"><code>paper_draft.md</code> · <code>paper_draft.docx</code> · <code>slides_presentation.pptx</code></div>
+  </div>
+</div>
+
+<!-- 6. Troubleshooting -->
+<h2 id="troubleshoot">6 — Résolution de problèmes <span class="anchor">#troubleshoot</span></h2>
+
+<h3>Elsevier retourne HTTP 401</h3>
+<pre><span class="cmt"># Vérifier que les variables sont bien exportées (pas juste dans .env)</span>
+<span class="cmd">echo</span> <span class="var">$ELSEVIER_API_KEY</span>   <span class="cmt"># doit afficher votre clé</span>
+<span class="cmd">export</span> <span class="var">ELSEVIER_API_KEY</span>=<span class="str">"..."</span>  <span class="cmt"># re-exporter si vide</span></pre>
+
+<h3>MODULE_NOT_FOUND : pptxgenjs</h3>
+<pre><span class="cmt"># Dans le répertoire du run :</span>
+<span class="cmd">npm install pptxgenjs</span>
+<span class="cmt"># Puis re-lancer /sota-export ou /sota-review</span></pre>
+
+<h3>apply_theme.js introuvable</h3>
+<pre><span class="cmt"># Vérifier que le skill pptx est installé</span>
+<span class="cmd">find</span> <span class="var">$HOME</span>/.claude/skills -name <span class="str">"apply_theme.js"</span> 2>/dev/null
+<span class="cmt"># Si vide : réinstaller le skill pptx depuis Claude Code settings</span></pre>
+
+<h3>Doublon détecté après curation</h3>
+<pre><span class="cmt"># Vérifier les doublons arXiv dans le CSV</span>
+<span class="cmd">python3 -c</span> <span class="str">"
+import pandas as pd
+df = pd.read_csv('master_research_data.csv')
+dup = df[df.duplicated(subset=['doi'], keep=False) & df['doi'].notna() & df['accepted']==True]
+print(dup[['id','title','doi','source_db']])
+"</span></pre>
+
+<h3>QualityScore trop bas (grade D)</h3>
+<p>Si QualityScore &lt; 50 :</p>
+<ol style="font-size: 0.87rem; color: var(--fg2);">
+  <li>Vérifier la couverture OpenAlex (flag affiché si &lt; 40%)</li>
+  <li>Ajouter des requêtes Semantic Scholar ciblées avec S2_API_KEY</li>
+  <li>Réviser les critères de curation (seuil 4 → 3 pour un domaine émergent)</li>
+  <li>Utiliser <code>/sota-update</code> après les corrections</li>
+</ol>
+
+<h3>gen_slides.js produit des slides avec des données incorrectes</h3>
+<div class="callout warn">
+  <strong>Cause probable :</strong> les noms de colonnes du CSV ont changé (ex. après une mise à jour de agent_analyst). Vérifier que <code>CORPUS_N</code> = <code>sum(accepted == True)</code> dans le CSV, et que <code>limits_report.md</code> contient bien une ligne <code>**Mean TRL:**</code>.
+</div>
+
+<div class="doc-footer">
+  <span>sota-agent v0.5 · Manuel des skills · 2026-10-12</span>
+  <span>Généré avec Claude Code</span>
+</div>
+
+</div>

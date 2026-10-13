@@ -1,0 +1,8 @@
+# sota-agent-0.3 — nouvelles dépendances (en plus des dépendances v0.2)
+# Installer avec : pip install -r requirements_v03.txt
+
+# PDF parsing (pdf_analyzer_agent, utils/pdf_utils.py)
+pymupdf>=1.24.0
+
+# HTTP requests (api_clients.py — probablement déjà installé)
+requests>=2.31.0

@@ -1,0 +1,39 @@
+# Run outputs — exclude actual run data, keep template only
+runs/*/
+!runs/index.md
+!runs/template/
+!runs/template/**
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+env/
+*.egg
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Secrets and API keys
+.env
+*.key
+*.token
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Build artifacts
+dist/
+build/
+
+# Large binary outputs
+*.pdf
+*.pptx
+*.docx
+*.csv
+openalex_cache.json

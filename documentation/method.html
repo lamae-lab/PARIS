@@ -1,0 +1,880 @@
+<!doctype html>
+<title>sota-agent — Documentation technique</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,600;1,400&display=swap">
+<style>
+:root {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface2: #f0f2f9;
+  --border: #dde1ef;
+  --fg: #1a1d2e;
+  --fg2: #4a5068;
+  --fg3: #7a82a0;
+  --navy: #0d1b2a;
+  --blue: #2e86ab;
+  --blue-light: #d6eaf8;
+  --green: #1a7a4a;
+  --green-light: #d5f0e3;
+  --amber: #b06000;
+  --amber-light: #fef3cd;
+  --red: #c0392b;
+  --red-light: #fdecea;
+  --purple: #6c3483;
+  --purple-light: #ede0f7;
+  --teal: #0e7490;
+  --teal-light: #cffafe;
+  --accent: var(--blue);
+  --code-bg: #1e2235;
+  --code-fg: #a9b1d6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117;
+    --surface: #1a1d2e;
+    --surface2: #242840;
+    --border: #2e3350;
+    --fg: #e8eaf6;
+    --fg2: #9fa8c0;
+    --fg3: #5c6480;
+    --navy: #0d1b2a;
+    --blue: #56b4d9;
+    --blue-light: #0d2a40;
+    --green: #34c77a;
+    --green-light: #0a2618;
+    --amber: #f5b942;
+    --amber-light: #2a1e00;
+    --red: #e74c3c;
+    --red-light: #2a0a08;
+    --purple: #b57bee;
+    --purple-light: #200a30;
+    --teal: #22d3ee;
+    --teal-light: #042a30;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --surface: #1a1d2e; --surface2: #242840; --border: #2e3350;
+  --fg: #e8eaf6; --fg2: #9fa8c0; --fg3: #5c6480;
+  --blue: #56b4d9; --blue-light: #0d2a40; --green: #34c77a; --green-light: #0a2618;
+  --amber: #f5b942; --amber-light: #2a1e00; --red: #e74c3c; --red-light: #2a0a08;
+  --purple: #b57bee; --purple-light: #200a30; --teal: #22d3ee; --teal-light: #042a30;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.65;
+  padding: 0 16px;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Layout ── */
+.page { max-width: 860px; margin: 0 auto; padding: 3rem 0 5rem; }
+
+/* ── Hero ── */
+.hero {
+  background: var(--navy);
+  color: #e8f4fd;
+  border-radius: 16px;
+  padding: 2.5rem 2rem 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2e86ab33, transparent 70%);
+}
+.hero-badge {
+  display: inline-block;
+  background: #2e86ab22;
+  border: 1px solid #2e86ab55;
+  color: #56b4d9;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25em 0.75em;
+  border-radius: 99px;
+  margin-bottom: 0.9rem;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.hero h1 {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.25;
+  margin-bottom: 0.75rem;
+  text-wrap: balance;
+}
+.hero p {
+  font-size: 0.98rem;
+  color: #a8c8e8;
+  max-width: 560px;
+  line-height: 1.6;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+.hero-stat { display: flex; flex-direction: column; }
+.hero-stat .num { font-size: 1.4rem; font-weight: 700; color: #56b4d9; font-family: 'IBM Plex Mono', monospace; }
+.hero-stat .lbl { font-size: 0.72rem; color: #7aadcc; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── Sections ── */
+h2 {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 2.5rem 0 1rem;
+  padding-top: 0.25rem;
+  border-top: 2px solid var(--blue);
+  padding-left: 0.5rem;
+  border-left: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+h2 .sec-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  background: var(--blue);
+  color: white;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-weight: 500;
+}
+h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--fg);
+  margin: 1.5rem 0 0.5rem;
+}
+p { margin-bottom: 0.9rem; color: var(--fg2); font-size: 0.95rem; }
+p:last-child { margin-bottom: 0; }
+
+/* ── Cards ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.card-sm {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+}
+.card-sm h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.25rem; }
+.card-sm p { font-size: 0.82rem; margin: 0; }
+
+/* ── Pipeline diagram ── */
+.pipeline {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem 1.2rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+.pipeline-phases { display: flex; flex-direction: column; gap: 0; }
+.phase {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.6rem 0;
+}
+.phase-label {
+  min-width: 110px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg3);
+  padding-top: 0.45rem;
+  flex-shrink: 0;
+}
+.phase-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 1;
+}
+.step-node {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--fg);
+  white-space: nowrap;
+}
+.step-node .step-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--fg3);
+  background: var(--border);
+  border-radius: 4px;
+  padding: 0.1em 0.3em;
+}
+.step-node.retrieval { border-color: #2e86ab55; background: var(--blue-light); color: var(--teal); }
+.step-node.curation  { border-color: #f39c1255; background: var(--amber-light); color: var(--amber); }
+.step-node.analysis  { border-color: #1a7a4a55; background: var(--green-light); color: var(--green); }
+.step-node.synthesis { border-color: #6c348355; background: var(--purple-light); color: var(--purple); }
+.step-node.review    { border-color: #0d1b2a55; background: var(--navy); color: #56b4d9; }
+.step-node.optional  { border-style: dashed; opacity: 0.85; }
+.step-arrow { color: var(--fg3); font-size: 0.9rem; flex-shrink: 0; }
+.checkpoint-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--amber-light);
+  border: 1px solid #f39c1288;
+  color: var(--amber);
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+.phase-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.2rem 0 0.2rem 118px;
+  flex-shrink: 0;
+}
+
+/* ── Agent table ── */
+.agent-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.85rem; overflow-x: auto; display: block; }
+.agent-table th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--fg2);
+  white-space: nowrap;
+}
+.agent-table td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  color: var(--fg2);
+}
+.agent-table tr:nth-child(even) td { background: var(--surface2); }
+.badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  white-space: nowrap;
+}
+.badge-blue   { background: var(--blue-light); color: var(--teal); }
+.badge-amber  { background: var(--amber-light); color: var(--amber); }
+.badge-green  { background: var(--green-light); color: var(--green); }
+.badge-purple { background: var(--purple-light); color: var(--purple); }
+.badge-navy   { background: var(--navy); color: #56b4d9; }
+.badge-new    { background: #fef3cd; color: #7d4a00; }
+
+/* ── Score formula ── */
+.formula-box {
+  background: var(--code-bg);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin: 1rem 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--code-fg);
+  overflow-x: auto;
+}
+.formula-box .hl { color: #7dcfff; }
+.formula-box .kw { color: #bb9af7; }
+.formula-box .val { color: #9ece6a; }
+.formula-box .cm { color: #565f89; font-style: italic; }
+
+/* ── Callout ── */
+.callout {
+  border-left: 3px solid var(--blue);
+  background: var(--blue-light);
+  border-radius: 0 8px 8px 0;
+  padding: 0.8rem 1rem;
+  margin: 1rem 0;
+  font-size: 0.88rem;
+  color: var(--fg);
+}
+.callout.warn { border-color: var(--amber); background: var(--amber-light); }
+.callout.good { border-color: var(--green); background: var(--green-light); }
+
+/* ── Stat grid ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+.stat-tile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+.stat-tile .val { font-size: 1.6rem; font-weight: 700; font-family: 'IBM Plex Mono', monospace; line-height: 1.1; }
+.stat-tile .lbl { font-size: 0.72rem; color: var(--fg3); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-tile.blue .val  { color: var(--blue); }
+.stat-tile.green .val { color: var(--green); }
+.stat-tile.amber .val { color: var(--amber); }
+.stat-tile.red .val   { color: var(--red); }
+
+/* ── TRL bar ── */
+.trl-bars { display: flex; flex-direction: column; gap: 0.6rem; margin: 1rem 0; }
+.trl-row { display: flex; align-items: center; gap: 0.75rem; }
+.trl-label { min-width: 100px; font-size: 0.8rem; color: var(--fg2); flex-shrink: 0; }
+.trl-bar-wrap { flex: 1; background: var(--surface2); border-radius: 4px; height: 18px; overflow: hidden; }
+.trl-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 0.7rem; font-weight: 600; color: white; }
+.trl-pct { min-width: 48px; font-size: 0.78rem; font-family: 'IBM Plex Mono', monospace; color: var(--fg2); text-align: right; }
+
+/* ── Legend ── */
+.legend { display: flex; flex-wrap: wrap; gap: 0.7rem; margin: 0.75rem 0; }
+.legend-item { display: flex; align-items: center; gap: 0.3rem; font-size: 0.78rem; color: var(--fg2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Output files ── */
+.output-list { display: flex; flex-direction: column; gap: 0.5rem; margin: 0.75rem 0; }
+.output-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.85rem;
+}
+.output-icon { font-size: 1rem; flex-shrink: 0; }
+.output-file { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; font-weight: 500; color: var(--blue); }
+.output-desc { color: var(--fg2); font-size: 0.82rem; }
+
+/* ── Footer ── */
+.doc-footer {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.78rem;
+  color: var(--fg3);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .phase-label { min-width: 80px; font-size: 0.62rem; }
+  .phase-divider { margin-left: 88px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero { padding: 1.5rem 1.2rem; }
+  .pipeline { padding: 1rem 0.75rem; }
+}
+</style>
+
+<div class="page">
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">sota-agent v0.5 · PRISMA 2020</div>
+  <h1>Documentation technique<br>de la méthode sota-agent</h1>
+  <p>Système multi-agents pour la production automatisée d'états de l'art PRISMA-conformes — du corpus à la publication.</p>
+  <div class="hero-meta">
+    <div class="hero-stat"><span class="num">15</span><span class="lbl">agents spécialisés</span></div>
+    <div class="hero-stat"><span class="num">11</span><span class="lbl">étapes de pipeline</span></div>
+    <div class="hero-stat"><span class="num">8</span><span class="lbl">skills Claude Code</span></div>
+    <div class="hero-stat"><span class="num">3</span><span class="lbl">formats de sortie</span></div>
+  </div>
+</div>
+
+<!-- 1. Présentation -->
+<h2><span class="sec-num">01</span> Présentation générale</h2>
+<p>sota-agent est un système de revue systématique automatisée, conçu pour produire des états de l'art conformes au protocole <strong>PRISMA 2020</strong> (Preferred Reporting Items for Systematic Reviews and Meta-Analyses). Il orchestre une chaîne de 15 agents spécialisés — chacun défini par un fichier SOUL.md — qui couvrent l'ensemble du processus : de la formulation de la question de recherche jusqu'à l'export en document Word et présentation PowerPoint.</p>
+<p>La conception repose sur trois principes : <strong>reproductibilité</strong> (toutes les requêtes sont loggées, tous les seuils sont explicites), <strong>traçabilité</strong> (chaque papier retenu peut être retrouvé dans le decision log), et <strong>auditabilité</strong> (les checkpoints humains empêchent le pipeline de procéder sans validation explicite).</p>
+
+<div class="card-grid">
+  <div class="card-sm" style="border-top: 3px solid var(--blue);">
+    <h4>🔍 Couverture bibliographique</h4>
+    <p>7 bases de données interrogées via API : OpenAlex, Semantic Scholar, arXiv, CrossRef, ScienceDirect, IEEE Xplore. Déduplication multi-clé (arXiv ID → DOI → titre).</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--green);">
+    <h4>📊 Analyse quantitative</h4>
+    <p>QualityScore 0–100 (grade A–D) sur 4 dimensions : réseau de citations, bibliométrie, sémantique, processus PRISMA.</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--purple);">
+    <h4>📄 Export multi-format</h4>
+    <p>Manuscrit Markdown (~8 000 mots), Word (.docx avec TOC), présentation PowerPoint (11 slides, thème QuantumControl).</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--amber);">
+    <h4>⚡ Checkpoints humains</h4>
+    <p>3 arrêts obligatoires : papiers borderline (Checkpoint A), score qualité + TRL (Checkpoint B), plan du manuscrit (Checkpoint C).</p>
+  </div>
+</div>
+
+<!-- 2. Pipeline -->
+<h2><span class="sec-num">02</span> Pipeline — vue d'ensemble</h2>
+<p>Le pipeline se déroule en 5 phases séquentielles. Les étapes en pointillé sont conditionnelles (elles nécessitent des ressources spécifiques). Les ⚠️ indiquent des checkpoints où le pipeline attend une décision humaine.</p>
+
+<div class="pipeline">
+  <div class="legend" style="margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);">
+    <div class="legend-item"><div class="legend-dot" style="background: #2e86ab;"></div> Acquisition</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #f39c12;"></div> Curation</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #1a7a4a;"></div> Analyse</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #6c3483;"></div> Synthèse</div>
+    <div class="legend-item"><div class="legend-dot" style="background: #0d1b2a;"></div> Revue &amp; Export</div>
+    <div class="legend-item" style="opacity:0.7;">-- optionnel/conditionnel</div>
+  </div>
+  <div class="pipeline-phases">
+
+    <div class="phase">
+      <div class="phase-label">Acquisition</div>
+      <div class="phase-steps">
+        <div class="step-node retrieval"><span class="step-num">1</span> scoper_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node retrieval"><span class="step-num">2</span> strategist_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node retrieval optional"><span class="step-num">2.5</span> pdf_retriever_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node retrieval"><span class="step-num">3</span> translator_agent</div>
+      </div>
+    </div>
+
+    <div class="phase-divider"></div>
+
+    <div class="phase">
+      <div class="phase-label">Curation</div>
+      <div class="phase-steps">
+        <div class="step-node curation"><span class="step-num">4</span> curator_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="checkpoint-badge">⚠️ Checkpoint A — papiers borderline</div>
+      </div>
+    </div>
+
+    <div class="phase-divider"></div>
+
+    <div class="phase">
+      <div class="phase-label">Analyse</div>
+      <div class="phase-steps">
+        <div class="step-node analysis"><span class="step-num">5</span> agent_analyst</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node analysis"><span class="step-num">5b</span> bibtex_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node analysis optional"><span class="step-num">5.5</span> pdf_analyzer_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node analysis"><span class="step-num">6</span> quality_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node analysis"><span class="step-num">7</span> gap_finder_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node analysis"><span class="step-num">7.5</span> limits_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="checkpoint-badge">⚠️ Checkpoint B — QualityScore + TRL</div>
+      </div>
+    </div>
+
+    <div class="phase-divider"></div>
+
+    <div class="phase">
+      <div class="phase-label">Synthèse</div>
+      <div class="phase-steps">
+        <div class="step-node synthesis"><span class="step-num">8</span> figure_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node synthesis"><span class="step-num">9</span> synthesizer_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="checkpoint-badge">⚠️ Checkpoint C — plan du manuscrit</div>
+      </div>
+    </div>
+
+    <div class="phase-divider"></div>
+
+    <div class="phase">
+      <div class="phase-label">Revue</div>
+      <div class="phase-steps">
+        <div class="step-node review"><span class="step-num">10</span> reviewer_agent</div>
+        <div class="step-arrow">→</div>
+        <div class="step-node review"><span class="step-num">11</span> export_agent</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 3. Agents -->
+<h2><span class="sec-num">03</span> Description des agents</h2>
+
+<div style="overflow-x: auto;">
+<table class="agent-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Agent</th>
+      <th>Rôle principal</th>
+      <th>Input clé</th>
+      <th>Output clé</th>
+      <th>Phase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><code>scoper_agent</code></td>
+      <td>Extrait les concepts PICO, génère la carte de mots-clés pour les requêtes</td>
+      <td>Sujet de recherche</td>
+      <td><code>scoper_output.md</code></td>
+      <td><span class="badge badge-blue">Acquisition</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><code>strategist_agent</code></td>
+      <td>Interroge 6 APIs académiques, déduplique (arXiv ID → DOI → titre)</td>
+      <td><code>scoper_output.md</code></td>
+      <td><code>raw_extraction_list.md</code></td>
+      <td><span class="badge badge-blue">Acquisition</span></td>
+    </tr>
+    <tr>
+      <td>2.5</td>
+      <td><code>pdf_retriever_agent</code></td>
+      <td>Télécharge les PDFs en accès libre (OA) via OpenAlex, arXiv, Elsevier, Unpaywall</td>
+      <td><code>raw_extraction_list.md</code></td>
+      <td><code>pdfs/</code>, <code>pdf_retrieval_report.md</code></td>
+      <td><span class="badge badge-blue">Acquisition</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><code>translator_agent</code></td>
+      <td>Détecte et traduit les résumés non-anglais, filtre les hors-scope linguistiques</td>
+      <td><code>raw_extraction_list.md</code></td>
+      <td><code>translation_report.md</code></td>
+      <td><span class="badge badge-blue">Acquisition</span></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><code>curator_agent</code></td>
+      <td>Pré-déduplication, scoring 0–10, équilibre thématique, borderline review</td>
+      <td><code>raw_extraction_list.md</code>, <code>scoper_output.md</code></td>
+      <td><code>borderline_review.md</code>, <code>curation_report.md</code></td>
+      <td><span class="badge badge-amber">Curation</span></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><code>agent_analyst</code></td>
+      <td>Consolide le CSV, génère le notebook PRISMA (Sections 1–6 : flowchart, stats, réseaux, temporal)</td>
+      <td><code>curation_report.md</code></td>
+      <td><code>master_research_data.csv</code>, notebook</td>
+      <td><span class="badge badge-green">Analyse</span></td>
+    </tr>
+    <tr>
+      <td>5b</td>
+      <td><code>bibtex_agent</code></td>
+      <td>Génère <code>references.bib</code> via CrossRef + fallback arXiv</td>
+      <td><code>master_research_data.csv</code></td>
+      <td><code>references.bib</code></td>
+      <td><span class="badge badge-green">Analyse</span> <span class="badge badge-new">v0.5</span></td>
+    </tr>
+    <tr>
+      <td>5.5</td>
+      <td><code>pdf_analyzer_agent</code></td>
+      <td>Extraction full-text (pymupdf) : sections, limitations, future work, indicateurs de reproductibilité</td>
+      <td><code>pdfs/</code></td>
+      <td><code>pdf_analysis_report.md</code></td>
+      <td><span class="badge badge-green">Analyse</span></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><code>quality_agent</code></td>
+      <td>QualityScore 0–100 (grade A–D) sur 4 dimensions, enrichissement OpenAlex, bridge papers</td>
+      <td>CSV, cache OpenAlex</td>
+      <td><code>quality_report.md</code></td>
+      <td><span class="badge badge-green">Analyse</span></td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><code>gap_finder_agent</code></td>
+      <td>Analyse des lacunes : intersections de concepts, gaps temporels, plateformes, méthodologiques</td>
+      <td>CSV, <code>scoper_output.md</code></td>
+      <td><code>gap_analysis.md</code></td>
+      <td><span class="badge badge-green">Analyse</span></td>
+    </tr>
+    <tr>
+      <td>7.5</td>
+      <td><code>limits_agent</code></td>
+      <td>Matrice TRL, limitations méthodologiques par cluster, carte de reproductibilité, Top 5 pistes</td>
+      <td>CSV, <code>curation_report.md</code>, <code>gap_analysis.md</code></td>
+      <td><code>limits_report.md</code></td>
+      <td><span class="badge badge-green">Analyse</span></td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><code>figure_agent</code></td>
+      <td>Génère 5 figures : taxonomie, timeline, heatmap, réseau de concepts, radar des gaps</td>
+      <td>CSV, analyses</td>
+      <td>5 figures + <code>figures_manifest.md</code></td>
+      <td><span class="badge badge-purple">Synthèse</span></td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><code>synthesizer_agent</code></td>
+      <td>Clustering thématique, plan du manuscrit (Checkpoint C), rédaction complète (~8 000 mots)</td>
+      <td>Tous les rapports d'analyse</td>
+      <td><code>synthesis_outline.md</code>, <code>paper_draft.md</code></td>
+      <td><span class="badge badge-purple">Synthèse</span></td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><code>reviewer_agent</code></td>
+      <td>Revue adversariale : intégrité des citations, comptages PRISMA, 10 dimensions de score, verdict</td>
+      <td><code>paper_draft.md</code>, CSV, bib</td>
+      <td><code>review_report.md</code> + verdict</td>
+      <td><span class="badge badge-navy">Revue</span></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code>export_agent</code></td>
+      <td>Génère <code>.docx</code> (pandoc) + <code>.pptx</code> 11 slides (pptxgenjs, thème QuantumControl)</td>
+      <td><code>paper_draft.md</code> + run folder</td>
+      <td><code>paper_draft.docx</code>, <code>slides_presentation.pptx</code></td>
+      <td><span class="badge badge-navy">Export</span></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- 4. PICO & Déduplication -->
+<h2><span class="sec-num">04</span> Concepts clés</h2>
+
+<h3>Le cadre PICO</h3>
+<p>Le scoper_agent structure la question de recherche selon le cadre PICO (emprunté à la médecine evidence-based) :</p>
+<div class="card-grid">
+  <div class="card-sm" style="border-left: 3px solid var(--blue);">
+    <h4>P — Population / Problem</h4>
+    <p>Le système ou domaine ciblé. Ex : systèmes de contrôle quantique.</p>
+  </div>
+  <div class="card-sm" style="border-left: 3px solid var(--green);">
+    <h4>I — Intervention</h4>
+    <p>La méthode ou approche étudiée. Ex : algorithmes ML/RL.</p>
+  </div>
+  <div class="card-sm" style="border-left: 3px solid var(--amber);">
+    <h4>C — Comparison</h4>
+    <p>L'état de l'art existant. Ex : contrôle optimal classique, PID.</p>
+  </div>
+  <div class="card-sm" style="border-left: 3px solid var(--purple);">
+    <h4>O — Outcome</h4>
+    <p>Les métriques mesurées. Ex : robustesse, fidélité, performance.</p>
+  </div>
+</div>
+<p>Le curator_agent utilise cette grille pour scorer les papiers (0–10) et détecter les blind spots dans l'analyse des limitations.</p>
+
+<h3>Déduplication multi-clé</h3>
+<p>Lors de la curation, chaque entrée de <code>raw_extraction_list.md</code> est comparée aux autres selon trois clés en cascade :</p>
+<div class="card" style="background: var(--code-bg); color: var(--code-fg); font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;">
+  <div style="color: #565f89; font-style: italic; margin-bottom: 0.5rem;">// Priorité 1 : arXiv ID (ex. arXiv:2405.12345)</div>
+  <div style="color: #7dcfff;">arXiv ID</div><div style="color: #565f89;"> → couvre les preprints capturés depuis arXiv ET OpenAlex</div>
+  <br>
+  <div style="color: #565f89; font-style: italic; margin-bottom: 0.5rem;">// Priorité 2 : DOI normalisé</div>
+  <div style="color: #9ece6a;">DOI</div><div style="color: #565f89;"> → couvre les articles publiés dans plusieurs bases</div>
+  <br>
+  <div style="color: #565f89; font-style: italic; margin-bottom: 0.5rem;">// Priorité 3 : titre normalisé (100 premiers caractères)</div>
+  <div style="color: #bb9af7;">titre normalisé</div><div style="color: #565f89;"> → fallback pour les entrées sans DOI ni arXiv ID</div>
+</div>
+<div class="callout warn">
+  <strong>Leçon du run de test :</strong> sans l'arXiv ID comme clé prioritaire, le papier arXiv:2605.26925 avait été indexé deux fois — une fois depuis arXiv, une fois depuis OpenAlex avec un DOI différent. Le doublon P0233/P0362 n'a été détecté qu'au stade de la revue finale.
+</div>
+
+<!-- 5. QualityScore -->
+<h2><span class="sec-num">05</span> QualityScore — formule et interprétation</h2>
+<p>Le quality_agent produit un score composite de 0 à 100 sur 4 dimensions, chacune normalisée en [0, 1] avant application des poids.</p>
+
+<div class="formula-box">
+<span class="kw">QS</span> = 100 × [
+  <span class="val">0.30</span> × <span class="hl">S_network</span>      <span class="cm">// réseau de co-citation (OpenAlex)</span>
++ <span class="val">0.25</span> × <span class="hl">S_bibliometric</span>  <span class="cm">// h-index, entropie temporelle, diversité venues</span>
++ <span class="val">0.20</span> × <span class="hl">S_semantic</span>      <span class="cm">// distinctivité clusters, couverture vocabulaire</span>
++ <span class="val">0.25</span> × <span class="hl">S_process</span>       <span class="cm">// taux d'inclusion, balance sources, distribution scores</span>
+]
+
+<span class="cm">// Grade : A (80+) | B (65–79) | C (50–64) | D (&lt; 50)</span>
+<span class="cm">// ⚠️  Si couverture OpenAlex &lt; 40% : S_network × (coverage / 0.40)</span>
+</div>
+
+<div class="card-grid">
+  <div class="card-sm" style="border-top: 3px solid var(--blue);">
+    <h4>S_network (30%)</h4>
+    <p>Construit le graphe de co-citation via OpenAlex. Mesure la modularité (Louvain) et l'alignement avec les clusters thématiques.</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--green);">
+    <h4>S_bibliometric (25%)</h4>
+    <p>H-index du corpus, entropie temporelle, coefficient de Gini des venues, taux de papiers fondateurs (cit. > 50).</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--purple);">
+    <h4>S_semantic (20%)</h4>
+    <p>TF-IDF des abstracts : distinctivité inter-clusters, couverture des mots-clés PICO, score de redondance.</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--amber);">
+    <h4>S_process (25%)</h4>
+    <p>Taux d'inclusion PRISMA (cible 30–60%), balance entre sources, distribution des scores de pertinence.</p>
+  </div>
+</div>
+
+<!-- 6. TRL -->
+<h2><span class="sec-num">06</span> Matrice TRL (Technology Readiness Level)</h2>
+<p>Le limits_agent assigne un niveau TRL (1–9) à chaque papier selon des indicateurs observables dans les abstracts et, quand disponible, le texte complet. La matrice révèle la maturité technologique du corpus.</p>
+
+<div class="card-grid">
+  <div class="card-sm" style="border-top: 3px solid var(--red);">
+    <h4>TRL 1–3 — Conceptuel</h4>
+    <p>Pas d'implémentation, résultats analytiques ou de simulation pure. Aucune comparaison à un baseline.</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--amber);">
+    <h4>TRL 4–6 — Expérimental</h4>
+    <p>Démo hardware, simulation + expérience partielle, dataset public cité, comparaison à un baseline nommé.</p>
+  </div>
+  <div class="card-sm" style="border-top: 3px solid var(--green);">
+    <h4>TRL 7–9 — Validé à l'échelle</h4>
+    <p>Déploiement en conditions réelles, benchmark reproductible, résultats vérifiés par un groupe indépendant.</p>
+  </div>
+</div>
+
+<h3>Résultats du run de test (ML for control protocols)</h3>
+<div class="trl-bars">
+  <div class="trl-row">
+    <div class="trl-label">TRL 1–3</div>
+    <div class="trl-bar-wrap">
+      <div class="trl-bar" style="width: 95.8%; background: #c0392b;">95.8%</div>
+    </div>
+    <div class="trl-pct">271 papiers</div>
+  </div>
+  <div class="trl-row">
+    <div class="trl-label">TRL 4–5</div>
+    <div class="trl-bar-wrap">
+      <div class="trl-bar" style="width: 3.2%; background: #f39c12;">3.2%</div>
+    </div>
+    <div class="trl-pct">9 papiers</div>
+  </div>
+  <div class="trl-row">
+    <div class="trl-label">TRL 6–9</div>
+    <div class="trl-bar-wrap">
+      <div class="trl-bar" style="width: 1.1%; background: #1a7a4a;">1.1%</div>
+    </div>
+    <div class="trl-pct">3 papiers</div>
+  </div>
+</div>
+<p style="font-size: 0.82rem;">Mean TRL = 2.14 / 9 — finding original qui illustre le paradoxe du RL : la méthode la plus publiée (C5, 49.5% du corpus) est aussi celle avec le plus faible TRL moyen (2.06/9).</p>
+
+<!-- 7. Outputs -->
+<h2><span class="sec-num">07</span> Fichiers produits par un run complet</h2>
+
+<div class="output-list">
+  <div class="output-item">
+    <div class="output-icon">📋</div>
+    <div>
+      <div class="output-file">master_research_data.csv</div>
+      <div class="output-desc">Corpus complet avec métadonnées, scores, clusters, flags de reproductibilité (open_code, open_data), TRL, full_text_available</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">📓</div>
+    <div>
+      <div class="output-file">prisma_analysis_report.ipynb</div>
+      <div class="output-desc">Notebook Jupyter avec flowchart PRISMA, statistiques descriptives, réseaux de co-citation/co-auteurs, analyse temporelle, QualityScore (Sections 1–7)</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">📊</div>
+    <div>
+      <div class="output-file">quality_report.md</div>
+      <div class="output-desc">Dashboard QualityScore (0–100, grade A–D), scores par dimension, bridge papers, recommandations d'amélioration</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">🔬</div>
+    <div>
+      <div class="output-file">limits_report.md</div>
+      <div class="output-desc">Analyse critique : limitations par cluster, matrice TRL, carte de reproductibilité, complémentarités inter-clusters, Top 5 pistes d'amélioration</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">📝</div>
+    <div>
+      <div class="output-file">paper_draft.md</div>
+      <div class="output-desc">Manuscrit complet (~8 000 mots) : Abstract, Introduction, Background, Methodology (avec QualityScore), Résultats par cluster, Discussion, Future Directions, Limitations, Conclusion, Références</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">📄</div>
+    <div>
+      <div class="output-file">paper_draft.docx</div>
+      <div class="output-desc">Export Word avec TOC, hiérarchie H1–H3, tables, blocs de code (pandoc)</div>
+    </div>
+  </div>
+  <div class="output-item">
+    <div class="output-icon">📊</div>
+    <div>
+      <div class="output-file">slides_presentation.pptx</div>
+      <div class="output-desc">11 slides, thème QuantumControl (dark/light alternés), 8 tuiles de stats, table de clusters, graphique TRL, 5+ pistes d'amélioration (pptxgenjs)</div>
+    </div>
+  </div>
+</div>
+
+<!-- 8. Run test -->
+<h2><span class="sec-num">08</span> Résultats du run de validation</h2>
+<p>Run réalisé le 2026-10-11 sur le sujet <em>« Machine Learning for Robust or Sensitive Control Protocols »</em> (physique quantique).</p>
+
+<div class="stat-grid">
+  <div class="stat-tile blue"><div class="val">809</div><div class="lbl">papiers screenés</div></div>
+  <div class="stat-tile blue"><div class="val">283</div><div class="lbl">papiers retenus</div></div>
+  <div class="stat-tile green"><div class="val">8</div><div class="lbl">clusters PICO</div></div>
+  <div class="stat-tile green"><div class="val">71.7</div><div class="lbl">QualityScore / 100</div></div>
+  <div class="stat-tile amber"><div class="val">2.14</div><div class="lbl">TRL moyen / 9</div></div>
+  <div class="stat-tile amber"><div class="val">50%</div><div class="lbl">couverture PDF</div></div>
+  <div class="stat-tile red"><div class="val">0.4%</div><div class="lbl">code disponible</div></div>
+  <div class="stat-tile blue"><div class="val">8.2</div><div class="lbl">verdict reviewer / 10</div></div>
+</div>
+
+<div class="callout good">
+  <strong>Résultat :</strong> verdict final <strong>8.2/10 — ACCEPT WITH MINOR REVISIONS</strong> après 2 itérations (6.5 → 8.2). Le reviewer automatique a détecté 4 problèmes critiques résolus en une passe par le synthesizer_agent.
+</div>
+
+<div class="doc-footer">
+  <span>sota-agent v0.5 · Documentation technique · 2026-10-12</span>
+  <span>Rédaction automatisée par Claude Code</span>
+</div>
+
+</div>
