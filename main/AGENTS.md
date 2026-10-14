@@ -19,7 +19,7 @@ Before doing anything else:
 - Never skip a mandatory human checkpoint
 - Never modify original files in an update run — append only
 
-## Sub-Agent Registry (v0.5 — 15 agents)
+## Sub-Agent Registry (v0.6 — 16 agents)
 
 | # | Agent | Role | New in |
 |---|-------|------|--------|
@@ -35,9 +35,10 @@ Before doing anything else:
 | 7 | **gap_finder_agent** | Research gap analysis: intersections, temporal, platform, methodological, open questions | v0.2 |
 | 7.5 | **limits_agent** | TRL matrix, methodological limitations, reproducibility map, Top 5 improvement paths | v0.3 *(updated v0.5)* |
 | 8 | **figure_agent** | 5 visual assets: taxonomy, timeline, heatmap, concept network, gap radar | v0.2 |
-| 9 | **synthesizer_agent** | Thematic clustering, outline validation, full manuscript draft | v0.2 (updated v0.3) |
+| 8.5 | **figure_embedder_agent** | Retrofit existing paper_draft.md to embed figures as `![caption](path)` syntax; regenerate DOCX/PPTX with figures | **v0.6 NEW** |
+| 9 | **synthesizer_agent** | Thematic clustering, outline validation, full manuscript draft; v0.6: `![caption](path)` image embedding | v0.2 *(updated v0.6)* |
 | 10 | **reviewer_agent** | Adversarial peer review, citation integrity check, final verdict | v0.2 |
-| 11 | **export_agent** | DOCX (pandoc) + PPTX (pptxgenjs, 11 slides); dynamic path resolution | v0.4 *(updated v0.5)* |
+| 11 | **export_agent** | DOCX (pandoc + `--resource-path=.`) + PPTX (pptxgenjs, 13 slides with figure slides 6a/8a) | v0.4 *(updated v0.6)* |
 | 12 | **updater_agent** | Delta retrieval for existing runs (refreshes corpus without full re-run) | v0.2 |
 
 ## Execution Protocol

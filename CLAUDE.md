@@ -1,6 +1,7 @@
 # PARIS — PRISMA Agentic Research Intelligence System
 
-**Version:** 0.5 (2026-10-13) — evolved from sota-agent-0.4  
+**Version:** 0.6 (2026-10-13) — figure embedding fix + figure_embedder_agent  
+**v0.6 fixes:** Figure embedding in DOCX/PPTX — synthesizer_agent now writes `![Figure N: caption](figN.png)` markdown image syntax (not text-only `*(Fig. N)*`); export_agent adds `--resource-path=.` and `cd` to run folder; PPTX gen_slides.js adds 2 figure slides (6a, 8a); new `figure_embedder_agent` to retrofit existing paper_draft.md files.  
 **v0.5 fixes:** Deduplication in curator_agent (arXiv ID priority); arXiv ID + rate-limiting in strategist_agent; dynamic path resolution in export_agent; main/SOUL.md resync (13 steps); QualityScore normalization + grade letter; env vars in RUN.md template; bibtex_agent (new, step 5b); limits_agent now reads curation_report.md  
 **v0.5 additions (in-place):** dedup arXiv ID, rate-limiting, dynamic path resolution, QualityScore normalization, bibtex_agent, journal-ready output (Highlights/CRediT/elsarticle), code consolidation into utils/ (openalex_utils, quality_utils, figures_utils), strategist C6 domain contamination guard  
 **v0.4 addition:** export_agent — generates `paper_draft.docx` (Word) and `slides_presentation.pptx` (11-slide conference deck)  

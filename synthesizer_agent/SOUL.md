@@ -103,9 +103,19 @@ Full manuscript after outline approval.
 
 **Citation format:** Use `[Author, Year]` keys throughout (e.g., `[Khaneja, 2005]`). The export_agent's pandoc citeproc will convert them to numbered references [1] in the final DOCX/TEX. Do NOT use plain `[N]` numbers in paper_draft.md — keep author-year keys so the source remains readable before compilation.
 
-**Figure integration rules:**
-- Every figure from `figures_manifest.md` must appear in the manuscript with its caption
-- Reference figures as "(Fig. N)" inline — do not describe what the figure shows if the caption already does
+**Figure integration rules (v0.6 — figures must be embedded, not just referenced):**
+- Every figure from `figures_manifest.md` must be embedded using **full markdown image syntax**, not plain-text parenthetical references.
+- Format: place the image tag on its own line with blank lines above and below, immediately after the paragraph that first mentions it:
+  ```markdown
+  The taxonomy of the field (Fig. 1) reveals eight thematic clusters organized by methodological approach.
+
+  ![Figure 1: caption_exactly_from_figures_manifest](fig1_taxonomy.png)
+  ```
+- Use the **exact filename** from `figures_manifest.md` (e.g. `fig1_taxonomy.png`, `fig2_timeline.png`, `fig3_platform_heatmap.png`, `fig4_concept_network.png`, `fig5_gap_radar.png`).
+- Prefer `.png` over `.svg` for DOCX/PPTX compatibility; if only `.svg` exists, use `.svg`.
+- Also keep the `(Fig. N)` inline mention in the sentence — it serves as the cross-reference in the text body.
+- **Do NOT use `*(Fig. N — ...)*` text-only references** — these produce no image in the exported DOCX or PPTX.
+- pandoc will embed the image via `--resource-path=.` (set by export_agent when running from the run folder).
 
 ## Behavior
 

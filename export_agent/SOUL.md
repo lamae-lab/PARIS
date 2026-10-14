@@ -20,9 +20,10 @@ figures_manifest.md    ← read for figure count
 
 ## Step 1 — Generate paper_draft.docx (Elsevier manuscript format, bibliography embedded)
 
-Run pandoc with bibliography processing:
+Run pandoc with bibliography processing. **Always `cd` into the run folder first** so that relative image paths (`fig1_taxonomy.png` etc.) resolve correctly. The `--resource-path=.` flag tells pandoc to look for figures in the current directory.
 
 ```bash
+cd "$(dirname "$(realpath paper_draft.md)")" && \
 pandoc paper_draft.md \
   -o paper_draft.docx \
   --from=markdown \
@@ -30,10 +31,13 @@ pandoc paper_draft.md \
   --bibliography=references.bib \
   --citeproc \
   --csl=elsevier-with-titles.csl \
+  --resource-path=. \
   --toc \
   --toc-depth=3 \
   --highlight-style=tango
 ```
+
+**Important (v0.6 fix):** If `paper_draft.md` contains `![Figure N: caption](figN_*.png)` markdown image tags, pandoc will embed them as inline images in the Word document only if `--resource-path=.` is present AND the working directory is the run folder. Always verify with: `ls -lh paper_draft.docx` and check the file size is > 50 KB (a figure-less draft would be smaller).
 
 **If the CSL file is missing**, download it first:
 ```bash
@@ -45,12 +49,14 @@ curl -L "https://raw.githubusercontent.com/citation-style-language/styles/master
 
 If the download fails entirely, fall back to:
 ```bash
+cd "$(dirname "$(realpath paper_draft.md)")" && \
 pandoc paper_draft.md \
   -o paper_draft.docx \
   --from=markdown \
   --to=docx \
   --bibliography=references.bib \
   --citeproc \
+  --resource-path=. \
   --toc \
   --toc-depth=3
 ```
@@ -146,7 +152,7 @@ Use the resolved `$APPLY_THEME` path in the `require()` inside `gen_slides.js`. 
 
 **pptxgenjs:** `require('pptxgenjs')` — if `MODULE_NOT_FOUND`, run `npm install pptxgenjs` in the run folder first.
 
-### Slide structure (11 slides)
+### Slide structure (13 slides — v0.6: added figure slides)
 
 | # | Type | Content |
 |---|------|---------|
@@ -156,11 +162,48 @@ Use the resolved `$APPLY_THEME` path in the `require()` inside `gen_slides.js`. 
 | 4 | PRISMA pipeline (light) | 4 boxes: SCREENED_N → auto-accepted → borderline reviewed → CORPUS_N; database table |
 | 5 | Section divider (dark) | "Results: Cluster Taxonomy", "N_CLUSTERS PICO concept clusters · CORPUS_N papers" |
 | 6 | Cluster table (light) | CLUSTER_TABLE with all clusters; dominant cluster row (highest %) highlighted amber; smallest clusters (< 2% of corpus) in red |
+| **6a** | **Figures — Taxonomy & Timeline (light)** | **Two-panel figure slide: left = `fig1_taxonomy.png` (field taxonomy, w=4.5, h=3.5, x=0.2, y=1.2); right = `fig2_timeline.png` (publication timeline, w=4.8, h=3.5, x=5.0, y=1.2). Title: "Field Structure and Publication Trends". Source: figures_manifest.md captions as subtitles under each image.** |
 | 7 | Dominant cluster analysis (dark) | Two panels: "DOM_N papers (DOM_PCT%)" vs "Mean TRL: DOM_TRL / 9"; read the dominant cluster name and TRL from CLUSTER_TABLE — do not hardcode "C5" or "RL Paradox" |
 | 8 | TRL bar chart (light) | 3 bars: TRL 1–3 (MEAN_TRL_LOW%, red), TRL 4–5 (MEAN_TRL_MID%, amber), TRL 6–9 (MEAN_TRL_HIGH%, green); read percentages from limits_report.md TRL matrix; "Mean TRL = MEAN_TRL / 9" headline |
+| **8a** | **Figures — Platform & Gaps (dark)** | **Two-panel figure slide: left = `fig3_platform_heatmap.png` (platform coverage, w=4.5, h=3.5, x=0.2, y=1.2); right = `fig5_gap_radar.png` (gap radar, w=4.5, h=3.5, x=5.1, y=1.2). Title: "Coverage Map and Research Gaps". Add `fig4_concept_network.png` as a small inset (w=2.5, h=1.8, x=7.2, y=3.6) if space allows.** |
 | 9 | Critical gaps (dark) | 3 smallest cluster cards: name, n, 1-line gap from gap_analysis.md — do not hardcode cluster IDs; read the 3 smallest by paper count from CLUSTER_TABLE |
 | 10 | Top improvement paths (light) | Top 5 (or 7 if limits_report has 7) numbered boxes: title + 1-line description from limits_report Section 5; 2-column layout |
 | 11 | Conclusion (dark) | 5 bullet points: 2 green (key positive findings), 2 red (key gaps), 1 blue (near-term priority from limits_report Path 1); verdict badge |
+
+**Figure slide implementation (pptxgenjs):**
+```js
+// Slide 6a — Taxonomy & Timeline
+const slide6a = prs.addSlide();
+apply_theme(slide6a, 'light');
+slide6a.addText('Field Structure and Publication Trends', { x: 0.3, y: 0.2, w: 9.4, h: 0.7, fontSize: 20, bold: true, color: C.navy });
+// Check if figure files exist before adding
+const fs = require('fs');
+if (fs.existsSync('fig1_taxonomy.png')) {
+  slide6a.addImage({ path: 'fig1_taxonomy.png', x: 0.2, y: 1.1, w: 4.5, h: 3.5 });
+  slide6a.addText(MANIFEST_CAPTIONS['fig1'] || 'Fig. 1 — Taxonomy', { x: 0.2, y: 4.7, w: 4.5, h: 0.4, fontSize: 9, color: C.gray, italic: true });
+}
+if (fs.existsSync('fig2_timeline.png')) {
+  slide6a.addImage({ path: 'fig2_timeline.png', x: 5.0, y: 1.1, w: 4.8, h: 3.5 });
+  slide6a.addText(MANIFEST_CAPTIONS['fig2'] || 'Fig. 2 — Timeline', { x: 5.0, y: 4.7, w: 4.8, h: 0.4, fontSize: 9, color: C.gray, italic: true });
+}
+
+// Slide 8a — Platform & Gaps
+const slide8a = prs.addSlide();
+apply_theme(slide8a, 'dark');
+slide8a.addText('Coverage Map and Research Gaps', { x: 0.3, y: 0.2, w: 9.4, h: 0.7, fontSize: 20, bold: true, color: C.white });
+if (fs.existsSync('fig3_platform_heatmap.png')) {
+  slide8a.addImage({ path: 'fig3_platform_heatmap.png', x: 0.2, y: 1.1, w: 4.5, h: 3.5 });
+  slide8a.addText(MANIFEST_CAPTIONS['fig3'] || 'Fig. 3 — Platform Coverage', { x: 0.2, y: 4.7, w: 4.5, h: 0.4, fontSize: 9, color: C.ice, italic: true });
+}
+if (fs.existsSync('fig5_gap_radar.png')) {
+  slide8a.addImage({ path: 'fig5_gap_radar.png', x: 5.1, y: 1.1, w: 4.5, h: 3.5 });
+  slide8a.addText(MANIFEST_CAPTIONS['fig5'] || 'Fig. 5 — Gap Radar', { x: 5.1, y: 4.7, w: 4.5, h: 0.4, fontSize: 9, color: C.ice, italic: true });
+}
+```
+
+**MANIFEST_CAPTIONS extraction:** Before building slides, read `figures_manifest.md` and parse the Caption column into a dict keyed by `fig1`..`fig5`. Use these as slide subtitles under each image.
+
+**Graceful degradation:** If a figure file does not exist, skip that `addImage` call silently — never crash. Log `WARNING: figN_*.png not found — skipping` to console.
 
 ### Theme and colors
 
