@@ -15,6 +15,11 @@
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Agents](https://img.shields.io/badge/Agents-15-purple)
+[![Website](https://img.shields.io/badge/🌐_Website-PARIS_LAMAE-teal)](https://lamae-lab.github.io/PARIS-site/)
+
+
+
+
 
 > **From research question to journal-ready manuscript in one pipeline.**  
 > PARIS is a multi-agent systematic literature review system built for [Claude Code](https://claude.ai/code). It automates every PRISMA 2020 stage — from database retrieval to Elsevier-formatted export — while keeping humans in the loop at critical decision points.
